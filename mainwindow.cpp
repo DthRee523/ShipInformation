@@ -6,10 +6,11 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    systemInit();
+    tcp = new TcpNetClient;
     initLoadingWindow();
+    systemInit();
     //测试代码
-    connectSuccess();
+    //connectSuccess();
 }
 
 MainWindow::~MainWindow()
@@ -39,9 +40,27 @@ void MainWindow::initLoadingWindow()
  */
 void MainWindow::systemInit()
 {
+    QThread *subThread = new QThread;
     connect(ui->intoMainWindow_btn, &QPushButton::clicked, this, [=] {
         ui->stackedWidget->setCurrentIndex(1);//跳转主页面
     });
+    connect(tcp, &TcpNetClient::connectStatus, this, [=](bool status){
+        if (status)
+        {
+            connectSuccess();
+        }
+        else
+        {
+            ui->stackedWidget->setCurrentIndex(0);
+            ui->connectTip_label->setText("服务器断开链接！");
+            ui->intoMainWindow_btn->setEnabled(false);
+        }
+    });
+    connect(tcp, &TcpNetClient::sendData, this, &MainWindow::getNetData);
+    connect(subThread, &QThread::started, tcp, &TcpNetClient::connectHost);
+    tcp->moveToThread(subThread);
+    qDebug() << "当前线程为：" << QThread::currentThreadId();
+    subThread->start();
 }
 
 /**
@@ -53,5 +72,24 @@ void MainWindow::connectSuccess()
     ui->connectTip_label->setText("连接成功！");
     ui->loadingImage_lab->hide();
     ui->intoMainWindow_btn->show();
+}
+
+/**
+ * 更新数据
+ * @brief MainWindow::getNetData
+ * @param data
+ */
+void MainWindow::getNetData(BaseData data)
+{
+    ui->COG_num_lab->setText(data.COG);
+    ui->SOG_num_lab->setText(data.SOG);
+    ui->latitude_str_lab->setText(data.Latitude);
+    ui->longitude_str_lab->setText(data.longitude);
+    ui->wind_direction_num_lab->setText(data.windData.Direction);
+    ui->wind_speed_num_lab->setText(QString::number(data.windData.Speed));
+    depth = data.waterDepth;
+    ui->water_depth_num_lab->setText(QString::number(depth));
+    headingAngle = data.HeadingAngle;
+    compassDegrees = data.HeadingAngle;
 }
 

@@ -10,11 +10,13 @@ CONFIG += c++11
 
 SOURCES += \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    tcpnetclient.cpp
 
 HEADERS += \
     baseData.h \
-    mainwindow.h
+    mainwindow.h \
+    tcpnetclient.h
 
 FORMS += \
     mainwindow.ui
