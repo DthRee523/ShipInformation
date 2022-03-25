@@ -2,7 +2,7 @@
 
 TcpNetClient::TcpNetClient(QObject *parent) : QObject(parent)
 {
-    socket = new QTcpSocket;
+    socket = new QTcpSocket(this);
     isConnected = false;
     connect(socket, &QTcpSocket::connected, this, [=](){
         emit connectStatus(true);
