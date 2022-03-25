@@ -8,11 +8,12 @@ TcpNetClient::TcpNetClient(QObject *parent) : QObject(parent)
         emit connectStatus(true);
     });
     connect(socket, &QTcpSocket::readyRead, this, [=](){
-        BaseData baseData;
-        socket->read((char*)&baseData, sizeof (baseData));
+        BaseData *baseData;
+        QByteArray recvData = socket->readAll();
+        baseData = reinterpret_cast<BaseData *>(recvData.data());
         qDebug() << "数据接收";
-        qDebug() << baseData.COG;
-        emit sendData(baseData);
+        qDebug() << baseData->COG.c_str();
+        //emit sendData(*baseData);
     });
     connect(socket, &QTcpSocket::disconnected, this, [=](){
         socket->deleteLater();

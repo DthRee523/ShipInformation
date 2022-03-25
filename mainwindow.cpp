@@ -81,11 +81,11 @@ void MainWindow::connectSuccess()
  */
 void MainWindow::getNetData(BaseData data)
 {
-    ui->COG_num_lab->setText(data.COG);
-    ui->SOG_num_lab->setText(data.SOG);
-    ui->latitude_str_lab->setText(data.Latitude);
-    ui->longitude_str_lab->setText(data.longitude);
-    ui->wind_direction_num_lab->setText(data.windData.Direction);
+    ui->COG_num_lab->setText(data.COG.c_str());
+    ui->SOG_num_lab->setText(data.SOG.c_str());
+    ui->latitude_str_lab->setText(data.Latitude.c_str());
+    ui->longitude_str_lab->setText(data.longitude.c_str());
+    ui->wind_direction_num_lab->setText(data.windData.Direction.c_str());
     ui->wind_speed_num_lab->setText(QString::number(data.windData.Speed));
     depth = data.waterDepth;
     ui->water_depth_num_lab->setText(QString::number(depth));
