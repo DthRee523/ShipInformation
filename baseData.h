@@ -2,7 +2,7 @@
 #define BASEDATA_H
 
 #include <string>
-
+#include <QMetaType>
 using namespace std;
 
 //基本数据头文件

@@ -56,6 +56,7 @@ void MainWindow::systemInit()
             ui->intoMainWindow_btn->setEnabled(false);
         }
     });
+    qRegisterMetaType<BaseData>("BaseData");
     connect(tcp, &TcpNetClient::sendData, this, &MainWindow::getNetData);
     connect(subThread, &QThread::started, tcp, &TcpNetClient::connectHost);
     tcp->moveToThread(subThread);
