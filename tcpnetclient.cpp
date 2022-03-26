@@ -8,12 +8,23 @@ TcpNetClient::TcpNetClient(QObject *parent) : QObject(parent)
         emit connectStatus(true);
     });
     connect(socket, &QTcpSocket::readyRead, this, [=](){
-        BaseData *baseData;
+        BaseData baseData;
         QByteArray recvData = socket->readAll();
-        baseData = reinterpret_cast<BaseData *>(recvData.data());
         qDebug() << "数据接收";
-        qDebug() << baseData->COG.c_str();
-        //emit sendData(*baseData);
+        QJsonDocument jsonData = QJsonDocument::fromJson(recvData);
+        QJsonObject jsonObject;
+        jsonObject = jsonData.object();
+        baseData.COG = jsonObject.value("COG").toString().toStdString();
+        baseData.SOG = jsonObject.value("SOG").toString().toStdString();
+        baseData.HeadingAngle = jsonObject.value("HeadingAngle").toDouble();
+        baseData.Latitude = jsonObject.value("Latitude").toString().toStdString();
+        baseData.longitude = jsonObject.value("longitude").toString().toStdString();
+        baseData.windData.CompassDegrees = jsonObject.value("CompassDegrees").toDouble();
+        baseData.windData.Direction = jsonObject.value("Direction").toString().toStdString();
+        baseData.windData.Speed = jsonObject.value("Speed").toDouble();
+        baseData.waterDepth = jsonObject.value("waterDepth").toDouble();
+        qDebug() << baseData.COG.c_str();
+        emit sendData(baseData);
     });
     connect(socket, &QTcpSocket::disconnected, this, [=](){
         socket->deleteLater();

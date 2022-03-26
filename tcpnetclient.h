@@ -7,6 +7,8 @@
 #include <QByteArray>
 #include <QtDebug>
 #include <QThread>
+#include <QJsonObject>
+#include <QJsonDocument>
 
 #include "baseData.h"
 
