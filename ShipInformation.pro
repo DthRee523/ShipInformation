@@ -1,4 +1,5 @@
 QT       += core gui network
+QT       += charts
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -11,12 +12,14 @@ CONFIG += c++11
 SOURCES += \
     main.cpp \
     mainwindow.cpp \
-    tcpnetclient.cpp
+    tcpnetclient.cpp \
+    timethread.cpp
 
 HEADERS += \
     baseData.h \
     mainwindow.h \
-    tcpnetclient.h
+    tcpnetclient.h \
+    timethread.h
 
 FORMS += \
     mainwindow.ui
